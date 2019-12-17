@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Login</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+    {% if object %}
+    <h1>{{ object.user.username|capfirst }} Activity</h1>
+    <h1>Currently: {{ object.current }}</h1>
+    <p>Updated: {{ object.timestamp }}</p>
+    {% endif %}
+
+    <form method='POST' action=''>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type='submit' value='{% if object2 %}{{object.next_activity }}{% else %}Check in{% endif %}' />
+
+    </form>
+
+    <p>Not {{ object.user.username }}? <a href='/logout'>Logout</a></p>
+</body>
+</html>
