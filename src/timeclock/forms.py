@@ -1,8 +1,15 @@
+from datetime import timedelta
+
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
+from .models import UserActivity
+from django.conf import settings
+
+ACTIVITY_TIME_DELTA=getattr(settings,"ACTIVITY_TIME_DELTA",timedelta(minutes=1))
 
 # http://joincfe.com/projects forms and formsets
 
@@ -19,6 +26,14 @@ class UserActivityForm(forms.Form):
             raise forms.ValidationError("This password is incorrect")
         else:
             user_obj = qs.first()
+            current = UserActivity.objects.current(user_obj)
+            if current:
+                actual_obj_time = current.timestamp
+                the_delta = ACTIVITY_TIME_DELTA
+                diff = the_delta+actual_obj_time
+                now = timezone.now()
+                if diff > now:
+                    raise forms.ValidationError("You must wait {time} before this action".format(time=the_delta))
             if not user_obj.check_password(password):
                 raise forms.ValidationError("This password is incorrect")
         return cleaned_data
