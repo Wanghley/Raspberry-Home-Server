@@ -1,11 +1,58 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 
 
+
 from .forms import LoginForm, UserActivityForm
 from .models import UserActivity
+
+User = get_user_model()
+
+
+class UsersActivityView(View):
+    def get(self, request, *args, **kwargs):
+        #print(UserActivity.objects.all().count())
+        #print(UserActivity.objects.all().today().count())
+        query = request.GET.get("q")
+        users = User.objects.all()
+        checked_in = []
+        checked_out = []
+        unknown = []
+        all_activity  =UserActivity.objects.all()
+        for u in users:
+            act = all_activity.filter(user=u).today().recent()
+            #act = u.useractivity_set.all().today()
+            if act.exists():
+                current_user_obj = act.first()
+                if current_user_obj.activity == 'checkin':
+                    checked_in.append(current_user_obj.id)
+                else:
+                    checked_out.append(current_user_obj.id)
+            else:
+                unknown.append(u)
+            
+        queryset_checkedin = UserActivity.objects.filter(id__in=checked_in)
+        queryset_checkedout = UserActivity.objects.filter(id__in=checked_out)
+        all_activity = all_activity.today().recent()
+
+        if query:
+            queryset_checkedin=queryset_checkedin.filter(user__username__iexact=query)
+            queryset_checkedout=queryset_checkedout.filter(user__username__iexact=query)
+            all_activity=all_activity.filter(
+                Q(user__username__iexact=query) |
+                Q(user__first_name__iexact=query)
+            )
+        context = {
+            "queryset_checkedin":queryset_checkedin,
+            "queryset_checkedout":queryset_checkedout,
+            "inactive_users": unknown,
+            "all_activity": all_activity,
+            "query":query,
+        }
+        return render(request, "timeclock/users-activity-view.html", context)
 
 
 # LOGIN REQUIRED
@@ -13,7 +60,8 @@ class ActivityView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect("/login/")
-        
+        username_ses=None
+        username_auth=None
         if request.session.get("username"):
             username_auth = request.user.username
             username_ses = request.session.get("username")

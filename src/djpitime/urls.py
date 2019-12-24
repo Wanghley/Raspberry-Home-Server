@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from timeclock.views import ActivityView, UserLogoutView, UserLoginView
+from timeclock.views import ActivityView, UserLogoutView, UserLoginView, UsersActivityView
 
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^logout/$', UserLogoutView.as_view()),
     url(r'^login/$', UserLoginView.as_view()),
+    url(r'^users/$', UsersActivityView.as_view()),
 
 ]
 
