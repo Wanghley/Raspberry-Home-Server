@@ -7,7 +7,7 @@
 
 The project was totally created to be used in a Raspberry PI board with linux system in order to provide for developers and makers a base django server to change and add their own server with their own requeriments. For this reason, the project has simply a totally python+django backend in order to control the web pages, a full admin page in order to manipulate users and a simple database to record the logins and logouts of users with webpages to view these datas.
 
-![](header.png)
+![](static/header.png)
 
 ## Requirements
   - Raspberry PI with linux installed
