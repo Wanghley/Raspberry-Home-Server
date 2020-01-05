@@ -1,13 +1,9 @@
 # Raspberry PI & Django base server
 > Base server of multiple uses - like IoT - made totally in Python+Django from a maker to makers
 
-[![NPM Version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
+![](static/header.png)
 
 The project was totally created to be used in a Raspberry PI board with linux system in order to provide for developers and makers a base django server to change and add their own server with their own requeriments. For this reason, the project has simply a totally python+django backend in order to control the web pages, a full admin page in order to manipulate users and a simple database to record the logins and logouts of users with webpages to view these datas.
-
-![](static/header.png)
 
 ## Requirements
   - Raspberry PI with linux installed
@@ -135,9 +131,5 @@ Distributed under the MIT license. See [``LICENSE``](https://github.com/Wanghley
 5. Create a new Pull Request
 
 <!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/datadog-metrics
+
 [npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki
