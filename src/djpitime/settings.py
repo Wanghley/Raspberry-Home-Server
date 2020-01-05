@@ -53,6 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'djpitime.urls'
+LOGIN_URL = "/login"
 
 TEMPLATES = [
     {

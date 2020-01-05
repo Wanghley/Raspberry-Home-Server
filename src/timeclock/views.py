@@ -3,8 +3,9 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
-
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .forms import LoginForm, UserActivityForm
 from .models import UserActivity
@@ -13,6 +14,10 @@ User = get_user_model()
 
 
 class UsersActivityView(View):
+    @method_decorator(staff_member_required)
+    def dispatch(self,*args,**kwargs):
+        return super(UsersActivityView, self).dispatch(*args,**kwargs)
+
     def get(self, request, *args, **kwargs):
         #print(UserActivity.objects.all().count())
         #print(UserActivity.objects.all().today().count())
@@ -36,7 +41,7 @@ class UsersActivityView(View):
             
         queryset_checkedin = UserActivity.objects.filter(id__in=checked_in)
         queryset_checkedout = UserActivity.objects.filter(id__in=checked_out)
-        all_activity = all_activity.today().recent()
+        all_activity = all_activity.recent()
 
         if query:
             queryset_checkedin=queryset_checkedin.filter(user__username__iexact=query)
@@ -57,6 +62,9 @@ class UsersActivityView(View):
 
 # LOGIN REQUIRED
 class ActivityView(View):
+    @method_decorator(login_required)
+    def dispatch(self,*args,**kwargs):
+        return super(ActivityView, self).dispatch(*args,**kwargs)
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect("/login/")
@@ -99,6 +107,7 @@ class UserLoginView(View):
         return render(request, "timeclock/login-view.html", context)
 
     def post(self, request, *args, **kwargs):
+        next_url = request.GET.get("next")
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get("username")
@@ -107,6 +116,8 @@ class UserLoginView(View):
             if user is not None:
                 login(request, user)
                 request.session['username'] = username
+            if next_url:
+                return HttpResponseRedirect(next_url)
             return HttpResponseRedirect("/")
         context = {"form": form}
         return render(request, "timeclock/login-view.html", context)
