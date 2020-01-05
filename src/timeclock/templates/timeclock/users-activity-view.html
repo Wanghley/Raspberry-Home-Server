@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-</head>
-<body>
-    <form method="GET" action="">
-        <input type="text" name="q" placeholder="Username" value="{{ request.GET.q }}"/>
-        <input type="submit" value="Search"/>
-    </form>
-
+    {% extends "base.html" %}
+    
+    {% block content %}
     <h1>All Activity</h1>
+    <form method="GET" action="">
+        <input class="form-control" type="text" name="q" placeholder="Username" value="{{ request.GET.q }}"/>
+        <br>
+        <input class="btn btn-secondary"  type="submit" value="Search"/>
+    </form>
+    <br>
     {% if queryset_checkedin%}
         <h3>Checked in Users</h3>
             <ul>
@@ -48,9 +43,4 @@
                 {% endfor %}
             </ul>
     {%endif%}
-</body>
-</html>
-
-"queryset_checkedin":queryset_checkedin,
-            "queryset_checkedout":queryset_checkedout,
-            "inactive_users": unknown,
+    {% endblock %}

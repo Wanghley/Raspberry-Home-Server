@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+
+    <title>DJPITime</title>
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row h-100 justify-content-center text-center">
+        <div class="col-sm-6 col-sm-offset-3">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+  </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'jquery/js/jquery-3.4.1.slim.min.js' %}"></script>
+    <script src="{% static 'popper/js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>
